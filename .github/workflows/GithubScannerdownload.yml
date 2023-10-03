@@ -1,7 +1,7 @@
 name: Send File to Salesforce
 on:
   workflow_run:
-    workflows: ["Pull Salesforce Metadata 12"] # Replace with the name of your first workflow
+    workflows: Pull Salesforce Metadata 12
     types:
       - completed
 jobs:
