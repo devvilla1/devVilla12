@@ -1,9 +1,9 @@
+
 name: Send File to Salesforce
 on:
-  workflow_run:
-    workflows: gitaction # Replace with the name of your first workflow
-    types:
-      - completed
+  push:
+    branches:
+      - master
 jobs:
   send_file:
     runs-on: ubuntu-latest
