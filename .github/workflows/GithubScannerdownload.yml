@@ -1,5 +1,5 @@
 
-name: Send File to Salesforce
+name: Send File to Salesforce env
 on:
   push:
     branches:
