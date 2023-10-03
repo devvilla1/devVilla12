@@ -57,7 +57,7 @@ jobs:
           echo "{access_token}={$ACCESS_TOKEN}" >> $GITHUB_OUTPUT
       - name: Send File to Salesforce
         run: |
-          FILE_PATH=ScannerResult.csv
+          FILE_PATH=/ScannerResult.csv
           echo "Current Working Directory: $(pwd)"
           echo "File Path: $FILE_PATH"
           SALESFORCE_URL=https://epam-2e1-dev-ed.develop.lightning.force.com/services/apexrest/uploadScanner
