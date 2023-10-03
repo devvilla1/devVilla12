@@ -54,7 +54,7 @@ jobs:
           PASSWORD=asset@2025
           TOKEN_RESPONSE=$(curl -d "grant_type=password" -d "client_id=$CLIENT_ID" -d "client_secret=$CLIENT_SECRET" -d "username=$USERNAME" -d "password=$PASSWORD" "https://test.salesforce.com/services/oauth2/token")
           ACCESS_TOKEN=$(echo "$TOKEN_RESPONSE" | jq -r '.access_token')
-          echo "::set-output name=access_token::$ACCESS_TOKEN"
+          echo "{access_token}={$ACCESS_TOKEN}" >> $GITHUB_OUTPUT
       - name: Send File to Salesforce
         run: |
           FILE_PATH= master:ScannerResult.csv
