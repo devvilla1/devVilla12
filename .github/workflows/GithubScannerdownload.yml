@@ -23,7 +23,7 @@ jobs:
           echo "token-response $TOKEN_RESPONSE"
           ACCESS_TOKEN=$(echo "$TOKEN_RESPONSE" | jq -r '.access_token')
           echo "token-response $ACCESS_TOKEN"
-          echo "{access_token}={$ACCESS_TOKEN}" >> $GITHUB_OUTPUT
+          echo "{access_token}={$ACCESS_TOKEN}" >> "$GITHUB_OUTPUT"
           echo "output-token ${{ steps.get_token.outputs.access_token }}"
       - name: Send File to Salesforces
         run: |
