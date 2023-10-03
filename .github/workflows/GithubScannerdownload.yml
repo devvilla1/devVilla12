@@ -1,7 +1,7 @@
 name: Send File to Salesforce
 on:
   workflow_run:
-    workflows: gitaction
+    workflows: gitaction # Replace with the name of your first workflow
     types:
       - completed
 jobs:
@@ -21,10 +21,10 @@ jobs:
           PASSWORD=asset@2025
           TOKEN_RESPONSE=$(curl -d "grant_type=password" -d "client_id=$CLIENT_ID" -d "client_secret=$CLIENT_SECRET" -d "username=$USERNAME" -d "password=$PASSWORD" "https://test.salesforce.com/services/oauth2/token")
           ACCESS_TOKEN=$(echo "$TOKEN_RESPONSE" | jq -r '.access_token')
-          echo "::set-output name=access_token::$ACCESS_TOKEN"
+          echo "{access_token}={$ACCESS_TOKEN}" >> $GITHUB_OUTPUT
       - name: Send File to Salesforce
         run: |
-          FILE_PATH= master/ScannerResult.csv
+          FILE_PATH=ScannerResult.csv
           SALESFORCE_URL=https://epam-2e1-dev-ed.develop.lightning.force.com/services/apexrest/uploadScanner
           ACCESS_TOKEN="${{ steps.get_token.outputs.access_token }}"
           curl -X POST -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-Type: multipart/form-data" -F "file=@$FILE_PATH" $SALESFORCE_URL
