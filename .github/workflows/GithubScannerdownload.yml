@@ -18,8 +18,8 @@ jobs:
           CLIENT_ID=3MVG9n_HvETGhr3A7RsBhmC5FTKle1C59pGSGAIky.5sEsZQq04PtYyZ.tuz7Jl7KDmBZP9JQfipVnyOz.O0V
           CLIENT_SECRET=9F611F06C496C62C34C322D298F3599FAA2FE8D3812736900E048C9E5D263111
           USERNAME=assest1_codeninja@epam.com
-          PASSWORD=asset@2025
-          TOKEN_RESPONSE=$(curl -d "grant_type=password" -d "client_id=$CLIENT_ID" -d "client_secret=$CLIENT_SECRET" -d "username=$USERNAME" -d "password=$PASSWORD" "https://test.salesforce.com/services/oauth2/token")
+          PASSWORD=asset@2025MQtJMCZeRMrLUyy25lvvvUKed
+          TOKEN_RESPONSE=$(curl -d "grant_type=password" -d "client_id=$CLIENT_ID" -d "client_secret=$CLIENT_SECRET" -d "username=$USERNAME" -d "password=$PASSWORD" "https://login.salesforce.com/services/oauth2/token")
           ACCESS_TOKEN=$(echo "$TOKEN_RESPONSE" | jq -r '.access_token')
           echo "{access_token}={$ACCESS_TOKEN}" >> $GITHUB_OUTPUT
       - name: Send File to Salesforce
