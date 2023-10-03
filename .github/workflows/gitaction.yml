@@ -58,7 +58,8 @@ jobs:
       - name: Send File to Salesforce
         run: |
           FILE_PATH=ScannerResult.csv
+          echo "Current Working Directory: $(pwd)"
           echo "File Path: $FILE_PATH"
           SALESFORCE_URL=https://epam-2e1-dev-ed.develop.lightning.force.com/services/apexrest/uploadScanner
           ACCESS_TOKEN="${{ steps.get_token.outputs.access_token }}"
-          curl -X POST -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-Type: multipart/form-data" -F "file=@$FILE_PATH" $SALESFORCE_URL
+          curl -v -X POST -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-Type: multipart/form-data" -F "file=@$FILE_PATH" $SALESFORCE_URL
