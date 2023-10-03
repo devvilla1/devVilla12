@@ -20,6 +20,7 @@ jobs:
           USERNAME=assest1_codeninja@epam.com
           PASSWORD=asset@2025MQtJMCZeRMrLUyy25lvvvUKed
           TOKEN_RESPONSE=$(curl -d "grant_type=password" -d "client_id=$CLIENT_ID" -d "client_secret=$CLIENT_SECRET" -d "username=$USERNAME" -d "password=$PASSWORD" "https://login.salesforce.com/services/oauth2/token")
+          echo "token-response $TOKEN_RESPONSE"
           ACCESS_TOKEN=$(echo "$TOKEN_RESPONSE" | jq -r '.access_token')
           echo "{access_token}={$ACCESS_TOKEN}" >> $GITHUB_OUTPUT
       - name: Send File to Salesforces
