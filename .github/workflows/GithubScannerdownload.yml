@@ -23,7 +23,7 @@ jobs:
           echo "token-response $TOKEN_RESPONSE"
           ACCESS_TOKEN=$(echo "$TOKEN_RESPONSE" | jq -r '.access_token')
           echo "token-response $ACCESS_TOKEN"
-          echo "access_token=$ACCESS_TOKEN"  >> "$GITHUB_ENV"
+          echo "access_token=jq -r '.access_token'"  >> "$GITHUB_ENV"
           echo "access-token $access_token"
           printf '%s\n' "$access_token"
       - name: Send File to Salesforces
