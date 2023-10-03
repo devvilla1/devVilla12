@@ -1,65 +1,65 @@
-name: Pull Salesforce Metadata 12
+# name: Pull Salesforce Metadata 12
 
-on:
-  push:
-    branches:
-      - master
+# on:
+#   push:
+#     branches:
+#       - master
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Install Salesforce CLI
-        run: npm install sfdx-cli --global
-      - name: Install Code Analyzer Plugin
-        run: sfdx plugins:install @salesforce/sfdx-scanner
-      - name: Run Workflow
-        id: write_file
-        uses: timheuer/base64-to-file@v1.2
-        with:
-          fileName: "myTemporaryFile.pem"
-          encodedString: ${{ vars.SF_PRIVATE_KEY }}
-      - name: Authenticate with Salesforce using JWT Token
-        env:
-          SF_CLIENT_ID: ${{ vars.SF_CLIENT_ID }}
-          SF_PRIVATE_KEY: ${{ steps.write_file.outputs.filePath }}
-          SF_USERNAME: ${{ vars.SF_USERNAME }}
-        run: sfdx force:auth:jwt:grant --clientid $SF_CLIENT_ID --jwtkeyfile $SF_PRIVATE_KEY --username $SF_USERNAME --setdefaultdevhubusername --setalias my-org
-      - name: Run Code Analyzer
-        run: sfdx scanner:run --target "*/**/*.cls" --outfile "ScannerResult.csv" --severity-threshold 2
-        continue-on-error: true
-      - name: Commit and push changes
-        run: |
-          git config --local user.email "nitin.nayan786@gmail.com"
-          git config --local user.name "nkn-boss"
-          git add .
-          git commit -m "Retrieved metadata from Salesforce"
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          branch: master
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-      - name: Install jq
-        run: sudo apt-get -y install jq
-      - name: Get Salesforce OAuth2 Token
-        id: get_token
-        run: |
-          CLIENT_ID=3MVG9n_HvETGhr3A7RsBhmC5FTKle1C59pGSGAIky.5sEsZQq04PtYyZ.tuz7Jl7KDmBZP9JQfipVnyOz.O0V
-          CLIENT_SECRET=9F611F06C496C62C34C322D298F3599FAA2FE8D3812736900E048C9E5D263111
-          USERNAME=assest1_codeninja@epam.com
-          PASSWORD=asset@2025
-          TOKEN_RESPONSE=$(curl -d "grant_type=password" -d "client_id=$CLIENT_ID" -d "client_secret=$CLIENT_SECRET" -d "username=$USERNAME" -d "password=$PASSWORD" "https://test.salesforce.com/services/oauth2/token")
-          ACCESS_TOKEN=$(echo "$TOKEN_RESPONSE" | jq -r '.access_token')
-          echo "{access_token}={$ACCESS_TOKEN}" >> $GITHUB_OUTPUT
-      - name: Send File to Salesforce
-        run: |
-          FILE_PATH=/ScannerResult.csv
-          echo "Current Working Directory: $(pwd)"
-          echo "File Path: $FILE_PATH"
-          SALESFORCE_URL=https://epam-2e1-dev-ed.develop.lightning.force.com/services/apexrest/uploadScanner
-          ACCESS_TOKEN="${{ steps.get_token.outputs.access_token }}"
-          curl -v -X POST -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-Type: multipart/form-data" -F "file=@$FILE_PATH" $SALESFORCE_URL
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
+#       - name: Install Salesforce CLI
+#         run: npm install sfdx-cli --global
+#       - name: Install Code Analyzer Plugin
+#         run: sfdx plugins:install @salesforce/sfdx-scanner
+#       - name: Run Workflow
+#         id: write_file
+#         uses: timheuer/base64-to-file@v1.2
+#         with:
+#           fileName: "myTemporaryFile.pem"
+#           encodedString: ${{ vars.SF_PRIVATE_KEY }}
+#       - name: Authenticate with Salesforce using JWT Token
+#         env:
+#           SF_CLIENT_ID: ${{ vars.SF_CLIENT_ID }}
+#           SF_PRIVATE_KEY: ${{ steps.write_file.outputs.filePath }}
+#           SF_USERNAME: ${{ vars.SF_USERNAME }}
+#         run: sfdx force:auth:jwt:grant --clientid $SF_CLIENT_ID --jwtkeyfile $SF_PRIVATE_KEY --username $SF_USERNAME --setdefaultdevhubusername --setalias my-org
+#       - name: Run Code Analyzer
+#         run: sfdx scanner:run --target "*/**/*.cls" --outfile "ScannerResult.csv" --severity-threshold 2
+#         continue-on-error: true
+#       - name: Commit and push changes
+#         run: |
+#           git config --local user.email "nitin.nayan786@gmail.com"
+#           git config --local user.name "nkn-boss"
+#           git add .
+#           git commit -m "Retrieved metadata from Salesforce"
+#       - name: Push changes
+#         uses: ad-m/github-push-action@master
+#         with:
+#           branch: master
+#       - name: Checkout Repository
+#         uses: actions/checkout@v2
+#       - name: Install jq
+#         run: sudo apt-get -y install jq
+#       - name: Get Salesforce OAuth2 Token
+#         id: get_token
+#         run: |
+#           CLIENT_ID=3MVG9n_HvETGhr3A7RsBhmC5FTKle1C59pGSGAIky.5sEsZQq04PtYyZ.tuz7Jl7KDmBZP9JQfipVnyOz.O0V
+#           CLIENT_SECRET=9F611F06C496C62C34C322D298F3599FAA2FE8D3812736900E048C9E5D263111
+#           USERNAME=assest1_codeninja@epam.com
+#           PASSWORD=asset@2025
+#           TOKEN_RESPONSE=$(curl -d "grant_type=password" -d "client_id=$CLIENT_ID" -d "client_secret=$CLIENT_SECRET" -d "username=$USERNAME" -d "password=$PASSWORD" "https://test.salesforce.com/services/oauth2/token")
+#           ACCESS_TOKEN=$(echo "$TOKEN_RESPONSE" | jq -r '.access_token')
+#           echo "{access_token}={$ACCESS_TOKEN}" >> $GITHUB_OUTPUT
+#       - name: Send File to Salesforce
+#         run: |
+#           FILE_PATH=/ScannerResult.csv
+#           echo "Current Working Directory: $(pwd)"
+#           echo "File Path: $FILE_PATH"
+#           SALESFORCE_URL=https://epam-2e1-dev-ed.develop.lightning.force.com/services/apexrest/uploadScanner
+#           ACCESS_TOKEN="${{ steps.get_token.outputs.access_token }}"
+#           curl -v -X POST -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-Type: multipart/form-data" -F "file=@$FILE_PATH" $SALESFORCE_URL
