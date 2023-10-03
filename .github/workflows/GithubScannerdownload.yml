@@ -23,13 +23,13 @@ jobs:
           echo "token-response $TOKEN_RESPONSE"
           ACCESS_TOKEN=$(echo "$TOKEN_RESPONSE" | jq -r '.access_token')
           echo "token-response $ACCESS_TOKEN"
-          echo "{access_token}={$ACCESS_TOKEN}" >> "$GITHUB_OUTPUT"
-          echo "output-token ${{ steps.get_token.outputs.access_token }}"
+          echo "{access_token}={$ACCESS_TOKEN}"  >> "$GITHUB_ENV"
+          echo "access-token $access_token"
       - name: Send File to Salesforces
         run: |
           FILE_PATH=ScannerResult.csv
           SALESFORCE_URL=https://epam-2e1-dev-ed.develop.lightning.force.com/services/apexrest/uploadScanner
-          ACCESS_TOKEN="${{ steps.get_token.outputs.access_token }}"
+          ACCESS_TOKEN=$access_token
           responseScanner=$(curl -X POST -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-Type: multipart/form-data" -F "file=@$FILE_PATH" $SALESFORCE_URL)
           echo "response-Scanner $responseScanner"
           
