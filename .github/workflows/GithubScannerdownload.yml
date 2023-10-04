@@ -28,7 +28,7 @@ jobs:
           SF_USERNAME: ${{ vars.SF_USERNAME }}
         run: sfdx force:auth:jwt:grant --clientid $SF_CLIENT_ID --jwtkeyfile $SF_PRIVATE_KEY --username $SF_USERNAME --setdefaultdevhubusername --setalias my-org
       - name: Run Code Analyzer
-        run: sfdx scanner:run --target "*/**/*.cls" --outfile "ScannerResult.csv"
+        run: sfdx scanner:run --target "*/**/*.cls" --outfile "ScannerResult.csv" --normalize-severity
         continue-on-error: true
       - name: Commit and push changes
         run: |
